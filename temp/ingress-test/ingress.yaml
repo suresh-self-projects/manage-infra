@@ -42,7 +42,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ingress-svc
-  namespace: ing-test-ns
+  namespace: ingress
 spec:
   selector:
     name: nginx-ingress-microk8s
