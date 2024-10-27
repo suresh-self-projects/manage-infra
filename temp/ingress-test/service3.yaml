@@ -14,20 +14,12 @@ spec:
         app: service3
     spec:
       containers:
-        - name: service3
-          image: ghcr.io/moutansos/hellocontainers:latest
+        - name: nginx
+          image: nginx:latest
           ports:
             - name: http
               containerPort: 80
-          env:
-            - name: ASPNETCORE_ENVIRONMENT
-              value: Development
-            - name: HELLOCONTAINERS_MESSAGE
-              value: 'Hello from Service 3!'
-      imagePullSecrets:
-        - name: ghcr-secret
-      nodeSelector:
-        kubernetes.io/os: linux
+
 ---
 apiVersion: v1
 kind: Service
