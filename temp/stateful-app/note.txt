@@ -1,0 +1,32 @@
+Enable storage(PVC) for database
+-------------------------------
+Run the following command to enable hostpath storage in MicroK8s:
+    microk8s enable storage
+
+Once enabled, verify that the StorageClass exists:
+    kubectl get storageclass
+
+You should see an output like this:
+    NAME                PROVISIONER                RECLAIMPOLICY   VOLUMEBINDINGMODE
+    microk8s-hostpath   microk8s.io/hostpath       Delete          Immediate
+
+Verify the Deployment
+--------------------------
+Check if the PostgreSQL pod is running:
+kubectl get pods -n database
+
+Check the service:
+kubectl get svc -n database
+
+
+Access PostgreSQL
+-----------------------
+Get the password:
+    microk8s kubectl get secret --namespace database postgres-db-postgresql -o jsonpath="{.data.postgres-password}" | base64 --decode
+
+
+Connect to the database:
+    kubectl run -n database pg-client --rm -it --image=bitnami/postgresql -- bash
+
+Then, inside the pod:
+    psql -h postgres-db-postgresql.database.svc.cluster.local -U admin -d mydb
