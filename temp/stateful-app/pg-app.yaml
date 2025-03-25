@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgres-db
+  namespace: argocd
+spec:
+  project: postgres-project
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: postgresql
+    targetRevision: "12.1.5"
+    helm:
+      values: |
+        global:
+          storageClass: "microk8s-hostpath" # Ensure MicroK8s storage is enabled
+        auth:
+          username: admin
+          password: secret123
+          database: mydb
+        primary:
+          persistence:
+            enabled: true
+            size: 10Gi
+        readReplicas:
+          replicaCount: 2
+          persistence:
+            enabled: true
+            size: 10Gi
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: database
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
